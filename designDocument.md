@@ -3,7 +3,7 @@ Their reviews are kept in their journal and it can give them a log of when they 
 
 
 
-<img width="1365" height="755" alt="image" src="https://github.com/user-attachments/assets/4dc3c524-9589-429c-9146-afcf776f19db" />
+<img width="1375" height="780" alt="image" src="https://github.com/user-attachments/assets/aa95a365-2822-4fa3-9e1c-de2f654d1428" />
 
 
 
