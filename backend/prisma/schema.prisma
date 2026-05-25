@@ -1,15 +1,100 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+//probly gonna change a lot of things regarding the models and variables in the future icl
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Gender {
+  Male
+  Female
+  Non-Binary
+  Gender Fluid
+  Other
+}
+
+model USER {
+  id        String @id @default(uuid())
+  username  String 
+  email     String @unique 
+  password  String
+  gender    Gender 
+  role      Role    @default(USER)
+  bio       String? 
+  //a short description of yourself (can be added later on your profile page if preferred)
+  journalId String?
+  //add link to journal here later
+}
+//https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#relations-in-prisma-client:~:text=%7D-,Relations%20in%20Prisma%20Client,-Create%20records%20with
+use this link to understand how the relationships in prisma works
+
+model REVIEW {
+  id String @id @default(uuid())
+  rating Int
+  //add a migration later for a check constraint
+  paragraph String
+  createdAt     DateTime    @default(now())
+  //albumId: link album here
+
+//this links the review to the journal
+  journal JOURNAL @relation(fields: [journalId], references: [id])
+  journalId String
+}
+
+model JOURNAL {
+  id String @id @default(uuid())
+  journalName String
+  //numberOfReviews   link here
+  FavGenre String
+  FavArtist
+  //userID    link here
+  //reviews:    link here
+  reviews REVIEW[]
+
+}
+
+enum Record {
+  EP
+  Single
+  Album
+}
+
+model ALBUM {
+  id String @id @default(uuid())\
+  name String
+  //artistId    LINK here
+  //artist        LINK HERE
+  genre: String
+  albumType Record
+  //songs  LINK HERE
+  //reviews     LINK HERE
+}
+
+model SONG {
+  id String @id @default(uuid())
+  name String
+  trackNumber int @default(autoincrement())
+  //album       LINK HERE
+  length Int
+  //artist      LINK HERE
+  description String
+
+}
+
+model ARTIST {
+  id String @id @default(uuid())
+  name String
+  dob DateTime @db.Date
+  bio String
+  //albums      LINK HERE
 }
