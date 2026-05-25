@@ -140,3 +140,4 @@ dist
 *.xdv
 
 .DS_Store
+/generated/prisma
