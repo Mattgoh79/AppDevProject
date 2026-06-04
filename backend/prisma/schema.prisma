@@ -1,14 +1,10 @@
-
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
 }
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-//probly gonna change a lot of things regarding the models and variables in the future icl
 
 enum Role {
   USER
@@ -18,83 +14,86 @@ enum Role {
 enum Gender {
   Male
   Female
-  Non-Binary
-  Gender Fluid
+  NonBinary
+  GenderFluid
   Other
 }
-
-model USER {
-  id        String @id @default(uuid())
-  username  String 
-  email     String @unique 
-  password  String
-  gender    Gender 
-  role      Role    @default(USER)
-  bio       String? 
-  //a short description of yourself (can be added later on your profile page if preferred)
-  journalId String?
-  //add link to journal here later
-}
-//https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#relations-in-prisma-client:~:text=%7D-,Relations%20in%20Prisma%20Client,-Create%20records%20with
-use this link to understand how the relationships in prisma works
-
-model REVIEW {
-  id String @id @default(uuid())
-  rating Int
-  //add a migration later for a check constraint
-  paragraph String
-  createdAt     DateTime    @default(now())
-  //albumId: link album here
-
-//this links the review to the journal
-  journal JOURNAL @relation(fields: [journalId], references: [id])
-  journalId String
-}
-
-model JOURNAL {
-  id String @id @default(uuid())
-  journalName String
-  //numberOfReviews   link here
-  FavGenre String
-  FavArtist
-  //userID    link here
-  //reviews:    link here
-  reviews REVIEW[]
-
-}
-
 enum Record {
   EP
   Single
   Album
 }
 
+ 
+
+
+ 
+
+model USER {
+  id        String   @id @default(uuid())
+  username  String   @db.VarChar(255)
+  email     String   @unique
+  password  String
+  gender    Gender
+  role      Role     @default(USER)
+  bio       String?
+  journalId String?  @unique      
+  journal   JOURNAL? @relation(fields: [journalId], references: [id])
+  reviews   REVIEW[]                 
+}
+
+model JOURNAL {
+  id          String   @id @default(uuid())
+  journalName String
+  FavGenre    String
+  FavArtist   String
+  user        USER?                  
+  reviews     REVIEW[]               
+}
+
+model REVIEW {
+  id        String   @id @default(uuid())
+  rating    Int                       // add a check constraint in like a migration: CHECK (rating >= 1 AND rating <= 10) so that it limits the rating to 5 stars ig
+  paragraph String
+  createdAt DateTime @default(now())
+  journalId String
+  journal   JOURNAL  @relation(fields: [journalId], references: [id])
+  userId    String
+  user      USER     @relation(fields: [userId], references: [id])
+  albumId   String
+  album     ALBUM    @relation(fields: [albumId], references: [id])
+}
+
 model ALBUM {
-  id String @id @default(uuid())\
-  name String
-  //artistId    LINK here
-  //artist        LINK HERE
-  genre: String
-  albumType Record
-  //songs  LINK HERE
-  //reviews     LINK HERE
+  id          String   @id @default(uuid())
+  name        String
+  genre       String
+  releaseDate DateTime
+  albumType   Record
+  artistId    String
+  artist      ARTIST   @relation(fields: [artistId], references: [id])
+  songs       SONG[]  
+  reviews     REVIEW[]
 }
 
 model SONG {
-  id String @id @default(uuid())
-  name String
-  trackNumber int @default(autoincrement())
-  //album       LINK HERE
-  length Int
-  //artist      LINK HERE
+  id          String  @id @default(uuid())
+  name        String
+  trackNumber Int
+  length      Int
+  genre       String
   description String
-
+  albumId     String
+  album       ALBUM   @relation(fields: [albumId], references: [id])
+  artistId    String
+  artist      ARTIST  @relation(fields: [artistId], references: [id])
 }
 
 model ARTIST {
-  id String @id @default(uuid())
-  name String
-  dob DateTime @db.Date
-  bio String
-  //albums      LINK HERE
+  id     String   @id @default(uuid())
+  name   String
+  dob    DateTime @db.Date
+  bio    String
+  albums ALBUM[]
+  songs  SONG[]  
 }
