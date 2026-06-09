@@ -24,12 +24,7 @@ enum Record {
   Album
 }
 
- 
-
-
- 
-
-model USER {
+model User {
   id        String   @id @default(uuid())
   username  String   @db.VarChar(255)
   email     String   @unique
@@ -38,45 +33,45 @@ model USER {
   role      Role     @default(USER)
   bio       String?
   journalId String?  @unique      
-  journal   JOURNAL? @relation(fields: [journalId], references: [id])
-  reviews   REVIEW[]                 
+  journal   Journal? @relation(fields: [journalId], references: [id])
+  reviews   Review[]                 
 }
 
-model JOURNAL {
+model Journal {
   id          String   @id @default(uuid())
   journalName String
   FavGenre    String
   FavArtist   String
-  user        USER?                  
-  reviews     REVIEW[]               
+  user        User?                  
+  reviews     Review[]               
 }
 
-model REVIEW {
+model Review {
   id        String   @id @default(uuid())
   rating    Int                       // add a check constraint in like a migration: CHECK (rating >= 1 AND rating <= 10) so that it limits the rating to 5 stars ig
   paragraph String
   createdAt DateTime @default(now())
   journalId String
-  journal   JOURNAL  @relation(fields: [journalId], references: [id])
+  journal   Journal  @relation(fields: [journalId], references: [id])
   userId    String
-  user      USER     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
   albumId   String
-  album     ALBUM    @relation(fields: [albumId], references: [id])
+  album     Album    @relation(fields: [albumId], references: [id])
 }
 
-model ALBUM {
+model Album {
   id          String   @id @default(uuid())
   name        String
   genre       String
   releaseDate DateTime
   albumType   Record
   artistId    String
-  artist      ARTIST   @relation(fields: [artistId], references: [id])
-  songs       SONG[]  
-  reviews     REVIEW[]
+  artist      Artist   @relation(fields: [artistId], references: [id])
+  songs       Song[]  
+  reviews     Review[]
 }
 
-model SONG {
+model Song {
   id          String  @id @default(uuid())
   name        String
   trackNumber Int
@@ -84,16 +79,16 @@ model SONG {
   genre       String
   description String
   albumId     String
-  album       ALBUM   @relation(fields: [albumId], references: [id])
+  album       Album   @relation(fields: [albumId], references: [id])
   artistId    String
-  artist      ARTIST  @relation(fields: [artistId], references: [id])
+  artist      Artist  @relation(fields: [artistId], references: [id])
 }
 
-model ARTIST {
-  id     String   @id @default(uuid())
-  name   String
-  dob    DateTime @db.Date
-  bio    String
-  albums ALBUM[]
-  songs  SONG[]  
+model Artist {
+  id          String   @id @default(uuid())
+  name        String
+  birthYear   Int
+  bio         String
+  albums      Album[]
+  songs        Song[]  
 }
