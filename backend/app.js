@@ -5,11 +5,15 @@
 import express from "express";
 import cors from "cors";
 import compression from "compression";
-// import isContentTypeApplicationJSON from "./middleware/content-type.js";
+import isContentTypeApplicationJSON from "./middleware/content-type.js";
 
 // import indexRoutes from "./routes/index.js";
 import artistRoutes from "./routes/artist.js";
 import songRoutes from "./routes/song.js";
+import albumRoutes from "./routes/album.js";
+import journalRoutes from "./routes/journal.js";
+import userRoutes from "./routes/user.js";
+import reviewRoutes from "./routes/reviews.js";
 // import playerRoutes from "./routes/player.js";
 // import authRoutes from "./routes/auth.js";
 // import courseRoutes from "./routes/course.js";
@@ -20,7 +24,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost";
 
-// app.use(isContentTypeApplicationJSON);
+app.use(isContentTypeApplicationJSON);
 
 app.use(cors());
 app.use(compression());
@@ -28,6 +32,10 @@ app.use(express.urlencoded({ extended: false })); // Parses URL-encoded (form) d
 app.use(express.json()); // Parses JSON request bodies
 app.use("/api/artists", artistRoutes);
 app.use("/api/songs", songRoutes);
+app.use("/api/albums", albumRoutes);
+app.use("/api/journals", journalRoutes);
+app.use("/api/users", userRoutes); 
+app.use("/api/reviews", reviewRoutes); 
 
 
 

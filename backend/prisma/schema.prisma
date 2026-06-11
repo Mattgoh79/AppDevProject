@@ -63,7 +63,7 @@ model Album {
   id          String   @id @default(uuid())
   name        String
   genre       String
-  releaseDate DateTime
+  releaseDate String
   albumType   Record
   artistId    String
   artist      Artist   @relation(fields: [artistId], references: [id])

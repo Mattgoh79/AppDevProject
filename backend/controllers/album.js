@@ -9,7 +9,7 @@ const createAlbum = async (req, res) => {
     const {name, genre, releaseDate, albumType, artistId }  = req.body;
 
     const album = await prisma.album.create({
-      data: { name, genre, releaseDate, albumType, artistId: { connect: {id: artistId}} },
+      data: { name, genre, releaseDate, albumType, artistId: artistId },
     });
 
     return res.status(201).json({
@@ -23,7 +23,7 @@ const createAlbum = async (req, res) => {
 
 const getAlbums = async (req, res) => {
   try{
-    const albums = await prisma.department.findMany();
+    const albums = await prisma.album.findMany();
     if(albums.length === 0){
       return res.status(404).json({ message: "No albums found"});
     }
@@ -43,7 +43,7 @@ const getAlbum = async (req, res) => {
         message: `No Album with the id: ${id} found`,
       });
     }
-    return res.status(200).json({data: department});
+    return res.status(200).json({data: album});
   }catch(err) {
     return res.status(500).json({message: err.message});
   }
@@ -82,7 +82,7 @@ const deleteAlbum = async (req, res) => {
 
     const album = await prisma.album.findUnique({ where: { id } });
 
-    if (!department) {
+    if (!album) {
       return res.status(404).json({
         message: `No album with the id: ${id} found`,
       });

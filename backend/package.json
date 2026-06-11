@@ -3,19 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-"scripts": {
-  "test": "echo \"Error: no test specified\" && exit 1",
-  "dev": "nodemon app.js",
-  "format:check": "prettier --check .",
-  "format:fix": "prettier --write .",
-  "lint:check": "eslint .",
-  "lint:fix": "eslint --fix .",
-  "docker:run:dev": "docker run --name id607001-db-dev -e POSTGRES_PASSWORD=HelloWorld123 -p 5432:5432 -d postgres",
-  "docker:run:test": "docker run --name id607001-db-test -e POSTGRES_PASSWORD=HelloWorld123 -p 5433:5432 -d postgres",
-  "env:copy": "cp .env.example .env || copy .env.example .env",
-  "prisma:migrate": "npx prisma migrate dev",
-  "prisma:reset": "npx prisma migrate reset --force"
-},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js",
+    "format:check": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "docker:run:dev": "docker run --name id607001-db-dev -e POSTGRES_PASSWORD=HelloWorld123 -p 5432:5432 -d postgres",
+    "docker:run:test": "docker run --name id607001-db-test -e POSTGRES_PASSWORD=HelloWorld123 -p 5433:5432 -d postgres",
+    "env:copy": "cp .env.example .env || copy .env.example .env",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:reset": "npx prisma migrate reset --force"
+  },
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
@@ -29,7 +29,8 @@
     "@prisma/client": "^6.19.3",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "joi": "^18.2.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
