@@ -4,7 +4,7 @@
  */
 import express from "express";
 import jwtAuth from "../middleware/jwtAuth.js";
-// import rbac from "../middleware/rbac.js";
+import rbac from "../middleware/rbac.js";
 import {
   createArtist,
   getArtists,
@@ -29,7 +29,7 @@ import rateLimiter from "../middleware/rateLimiter.js";
 
 //UNCOMMENT AFTER ADDING, ROLE BASED ACCESS, AUTH, VALIDATION,  AND RATE LIMIT
 
-router.post("/", validatePostArtist, jwtAuth, createArtist,);
+router.post("/", validatePostArtist, jwtAuth, rbac("ADMIN"), createArtist,);
 router.get("/",rateLimiter, getArtists);
 router.get("/:id",rateLimiter, getArtist);
 router.put("/:id", validatePutArtist,updateArtist);

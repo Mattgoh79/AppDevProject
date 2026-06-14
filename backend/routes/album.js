@@ -4,7 +4,7 @@
  */
 import express from "express";
 import jwtAuth from "../middleware/jwtAuth.js";
-// import rbac from "../middleware/rbac.js";
+import rbac from "../middleware/rbac.js";
 import {
   createAlbum,
   getAlbums,
@@ -28,7 +28,7 @@ import rateLimiter from "../middleware/rateLimiter.js";
 
 //UNCOMMENT AFTER ADDING, ROLE BASED ACCESS, AUTH, VALIDATION,  AND RATE LIMIT
 
-router.post("/", validatePostAlbum, jwtAuth, createAlbum,);
+router.post("/", validatePostAlbum, jwtAuth, rbac("ADMIN"), createAlbum,);
 router.get("/", rateLimiter, getAlbums);
 router.get("/:id", rateLimiter, getAlbum);
 router.put("/:id", validatePutAlbum, updateAlbum);
