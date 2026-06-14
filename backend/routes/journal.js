@@ -3,7 +3,7 @@
  * @author aTT
  */
 import express from "express";
-// import jwtAuth from "../middleware/jwtAuth.js";
+import jwtAuth from "../middleware/jwtAuth.js";
 // import rbac from "../middleware/rbac.js";
 import {
   createJournal,
@@ -17,10 +17,11 @@ import {
 
 const router = express.Router();
 
-// import {
-//   validatePostJournal,
-//   validatePutJournal,
-// } from "../middleware/validation/journal.js";
+import {
+  validatePostJournal,
+  validatePutJournal,
+} from "../middleware/validation/journal.js";
+import rateLimiter from "../middleware/rateLimiter.js";
 // router.post("/", validatePostJournal, jwtAuth, rbac("ADMIN"), createJournal,);
 // router.get("/", rateLimiter, getJournals);
 // router.get("/:id", rateLimiter, getJournal);
@@ -28,10 +29,10 @@ const router = express.Router();
 
 //UNCOMMENT AFTER ADDING, ROLE BASED ACCESS, AUTH, VALIDATION,  AND RATE LIMIT
 
-router.post("/", createJournal,);
-router.get("/", getJournals);
-router.get("/:id", getJournal);
-router.put("/:id", updateJournal);
+router.post("/",validatePostJournal, jwtAuth, createJournal,);
+router.get("/",rateLimiter, getJournals);
+router.get("/:id",rateLimiter, getJournal);
+router.put("/:id",validatePutJournal, updateJournal);
 
 
 

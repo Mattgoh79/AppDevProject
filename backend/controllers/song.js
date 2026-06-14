@@ -64,7 +64,7 @@ const updateSong = async (req, res) => {
 
     const updatedSong = await prisma.song.update({
       where: { id },
-      data: { name, trackNumber, length, genre, description, albumId: { connect: { id: albumId } }, artistId: { connect: {id: artistId}} },
+      data: { name, trackNumber, length, genre, description, albumId: albumId , artistId:  artistId },
     });
 
     return res.status(200).json({

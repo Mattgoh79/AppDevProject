@@ -57,5 +57,53 @@ const validatePostAlbum = (req, res, next) => {
   next();
 };
 
-export { validatePostAlbum};
-// export { validatePostInstitution, validatePutInstitution };
+const validatePutAlbum = (req, res, next) => {
+  const albumschema = Joi.object({
+    name: Joi.string().min(3).max(100).optional().messages({
+      "string.base": "name should be a string",
+      "string.empty": "name cannot be empty",
+      "string.min": "name should have a minimum length of {#limit}",
+      "string.max": "name should have a maximum length of {#limit}",
+    }),
+    genre: Joi.string().min(3).max(100).optional().messages({
+      "string.base": "genre should be a string",
+      "string.empty": "genre cannot be empty",
+      "string.min": "genre should have a minimum length of {#limit}",
+      "string.max": "genre should have a maximum length of {#limit}",
+    }),
+    releaseDate: Joi.string().min(3).max(100).optional().messages({
+      "string.base": "releaseDate should be a string",
+      "string.empty": "releaseDate cannot be empty",
+      "string.min": "releaseDate should have a minimum length of {#limit}",
+      "string.max": "releaseDate should have a maximum length of {#limit}",
+    }),
+      artistId: Joi.string().min(3).max(100).optional().messages({
+    "string.base": "artistId should be a string",
+    "string.empty": "artistId cannot be empty",
+    "string.min": "artistId should have a minimum length of {#limit}",
+    "string.max": "artistId should have a maximum length of {#limit}",
+  }),
+  }).min(1); // At least one field must be provided
+
+  const { error } = albumschema.validate(req.body, {
+    abortEarly: false,
+    convert: false,
+  });
+
+  if (error) {
+    const formattedErrors = error.details.map(({ message, type }) => ({
+      message,
+      type,
+    }));
+    return res.status(409).json({ errors: formattedErrors });
+  }
+
+  next();
+};
+
+export { validatePostAlbum, validatePutAlbum };
+
+
+
+// export { validatePostAlbum};
+// export { validatePostAlbum, validatePutAlbum };

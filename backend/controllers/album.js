@@ -37,7 +37,7 @@ const getAlbums = async (req, res) => {
 const getAlbum = async (req, res) => {
   try{
     const{id} = req.params;
-    const album = await prisma.album.findUnique();
+    const album = await prisma.album.findUnique( {where: { id }});
     if(!album){
       return res.status(404).json({
         message: `No Album with the id: ${id} found`,
@@ -64,7 +64,7 @@ const updateAlbum = async (req, res) => {
 
     const updatedAlbum = await prisma.album.update({
       where: { id },
-      data: { name, genre, releaseDate, albumType, artistId: { connect: {id: artistId}} },
+      data: { name, genre, releaseDate, albumType, artistId: artistId},
     });
 
     return res.status(200).json({

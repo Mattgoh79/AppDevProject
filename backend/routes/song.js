@@ -3,7 +3,7 @@
  * @author aTT
  */
 import express from "express";
-// import jwtAuth from "../middleware/jwtAuth.js";
+import jwtAuth from "../middleware/jwtAuth.js";
 // import rbac from "../middleware/rbac.js";
 import {
   createSong,
@@ -17,10 +17,12 @@ import {
 
 const router = express.Router();
 
-// import {
-//   validatePostSong,
-//   validatePutSong,
-// } from "../middleware/validation/song.js";
+import {
+  validatePostSong,
+  validatePutSong,
+} from "../middleware/validation/song.js";
+import rateLimiter from "../middleware/rateLimiter.js";
+// import jwtAuth from "../middleware/jwtAuth.js";
 // router.post("/", validatePostSong, jwtAuth, rbac("ADMIN"), createSong,);
 // router.get("/", rateLimiter, getSongs);
 // router.get("/:id", rateLimiter, getSong);
@@ -28,10 +30,10 @@ const router = express.Router();
 
 //UNCOMMENT AFTER ADDING, ROLE BASED ACCESS, AUTH, VALIDATION,  AND RATE LIMIT
 
-router.post("/", createSong,);
-router.get("/", getSongs);
-router.get("/:id", getSong);
-router.put("/:id", updateSong);
+router.post("/", validatePostSong, jwtAuth, createSong,);
+router.get("/", rateLimiter, getSongs);
+router.get("/:id", rateLimiter, getSong);
+router.put("/:id", validatePutSong ,updateSong);
 
 
 

@@ -64,7 +64,7 @@ const updateJournal = async (req, res) => {
 
     const updatedJournal = await prisma.journal.update({
       where: { id },
-      data: { name, genre, releaseDate, journalType, artistId: { connect: {id: artistId}} },
+      data: { journalName, FavGenre, FavArtist },
     });
 
     return res.status(200).json({

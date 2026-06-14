@@ -3,7 +3,7 @@
  * @author aTT
  */
 import express from "express";
-// import jwtAuth from "../middleware/jwtAuth.js";
+import jwtAuth from "../middleware/jwtAuth.js";
 // import rbac from "../middleware/rbac.js";
 import {
   createArtist,
@@ -17,10 +17,11 @@ import {
 
 const router = express.Router();
 
-// import {
-//   validatePostArtist,
-//   validatePutArtist,
-// } from "../middleware/validation/artist.js";
+import {
+  validatePostArtist,
+  validatePutArtist,
+} from "../middleware/validation/artist.js";
+import rateLimiter from "../middleware/rateLimiter.js";
 // router.post("/", validatePostArtist, jwtAuth, rbac("ADMIN"), createArtist,);
 // router.get("/", rateLimiter, getArtists);
 // router.get("/:id", rateLimiter, getArtist);
@@ -28,10 +29,10 @@ const router = express.Router();
 
 //UNCOMMENT AFTER ADDING, ROLE BASED ACCESS, AUTH, VALIDATION,  AND RATE LIMIT
 
-router.post("/", createArtist,);
-router.get("/", getArtists);
-router.get("/:id", getArtist);
-router.put("/:id", updateArtist);
+router.post("/", validatePostArtist, jwtAuth, createArtist,);
+router.get("/",rateLimiter, getArtists);
+router.get("/:id",rateLimiter, getArtist);
+router.put("/:id", validatePutArtist,updateArtist);
 
 
 

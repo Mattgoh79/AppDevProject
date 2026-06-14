@@ -14,8 +14,7 @@ import albumRoutes from "./routes/album.js";
 import journalRoutes from "./routes/journal.js";
 import userRoutes from "./routes/user.js";
 import reviewRoutes from "./routes/reviews.js";
-// import playerRoutes from "./routes/player.js";
-// import authRoutes from "./routes/auth.js";
+import authRoutes from "./routes/auth.js";
 // import courseRoutes from "./routes/course.js";
 
 
@@ -36,6 +35,7 @@ app.use("/api/albums", albumRoutes);
 app.use("/api/journals", journalRoutes);
 app.use("/api/users", userRoutes); 
 app.use("/api/reviews", reviewRoutes); 
+app.use("/api/auth", authRoutes); 
 
 
 
