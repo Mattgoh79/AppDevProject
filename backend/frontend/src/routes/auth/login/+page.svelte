@@ -1,0 +1,35 @@
+<script>
+  let { form } = $props();
+</script>
+
+<h1>Login</h1>
+
+<form method="POST" action="?/login">
+  <label for="email">Email Address:</label>
+  <input
+    id="email"
+    name="email"
+    type="email"
+    value={form?.email ?? ''}
+    placeholder="Enter email address"
+  />
+
+  <label for="password">Password:</label>
+  <input
+    id="password"
+    name="password"
+    type="password"
+    value={form?.password ?? ''}
+    placeholder="Enter password"
+  />
+
+  <button type="submit">Submit</button>
+</form>
+
+{#if form?.success}
+  <p>{form.message}</p>
+{/if}
+
+{#if form?.success === false}
+  <p>{form.error}</p>
+{/if}

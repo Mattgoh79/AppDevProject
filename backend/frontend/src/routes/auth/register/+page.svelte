@@ -18,7 +18,7 @@
   <input
     id="email"
     name="email"
-    type="text"
+    type="email"
     value={form?.email ?? ''}
     placeholder="Enter Email Address"
   />
