@@ -17,7 +17,8 @@
     "prisma:reset": "npx prisma migrate reset --force",
     "test": "mocha",
     "test:coverage": "c8 mocha",
-    "test:coverage:report": "c8 report --reporter=html"
+    "test:coverage:report": "c8 report --reporter=html",
+    "prisma:seed:artist": "node ./prisma/seeding/artist.js"
   },
   "config": {
     "commitizen": {

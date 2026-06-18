@@ -47,7 +47,12 @@ export const actions = {
       maxAge: 60 * 60,
       path: "/",
     });
-
-    redirect(303, "/createArtist");
+// just this alone works
+    // redirect(303, "/admin/createArtist");
+    if(data.user.role === "ADMIN") {
+      throw redirect(303, "/admin/createArtist");
+    } else {
+      throw redirect(303, "/user/id/dashboard");
+    }
   },
 };
