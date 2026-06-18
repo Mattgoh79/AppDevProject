@@ -25,9 +25,8 @@ export const actions = {
     const token = cookies.get("token");
 
     const formData = await request.formData();
-    const name = formData.get("rating");
-    const birthYear = formData.get("paragraph");
-    const bio = formData.get("createdAt");
+    const name = formData.get("name");
+const birthYear = Number(formData.get("birthYear"));    const bio = formData.get("bio");
     const artist = { name, birthYear, bio };
 
     try {
@@ -63,4 +62,25 @@ export const actions = {
       });
     }
   },
+    delete: async ({ request, cookies }) => {
+    const token = cookies.get("token");
+
+    const formData = await request.formData();
+    const name = formData.get("name");
+    const birthYear = formData.get("birthYear");
+    const bio = formData.get("bio");
+    const artist = { name, birthYear, bio };}
+
+    //SMTH LIKE THIS
+//  try {
+//       const res = await fetch(`${API_BASE_URL}/api/artists`, {
+//         method: "DELETE",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${token}`,
+//         },
+//         body: JSON.stringify(artist), 
+//       });
+
+//       const data = await res.json();
 };

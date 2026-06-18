@@ -1,5 +1,5 @@
 import { env } from "$env/dynamic/private";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 
 const API_BASE_URL = env.API_BASE_URL || "http://localhost:3000";
 
@@ -21,6 +21,7 @@ export const actions = {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(user),
+        
       });
 
       const data = await res.json();
@@ -40,6 +41,7 @@ export const actions = {
       }
 
       return { success: true, message: data.message };
+
     } catch (err) {
       return fail(500, {
         success: false,
@@ -53,5 +55,6 @@ export const actions = {
           
       });
     }
+  
   },
 };

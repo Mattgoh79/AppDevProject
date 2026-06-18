@@ -22,7 +22,7 @@
 </script>
 
 <Container class="mt-4">
-  <h1 class="mb-4">Dashboard</h1>
+  <h1 class="mb-4">Create Artist</h1>
 
   <Card class="mb-4">
     <CardHeader>Create Artist</CardHeader>

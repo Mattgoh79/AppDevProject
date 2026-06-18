@@ -48,6 +48,6 @@ export const actions = {
       path: "/",
     });
 
-    redirect(303, "/dashboard");
+    redirect(303, "/createArtist");
   },
 };
