@@ -1,67 +1,129 @@
 <script>
+  import { goto } from '$app/navigation'; 
+  import {
+    Card, CardBody, Form, FormGroup, Label, Input,
+    InputGroup, InputGroupText, Button
+  } from '@sveltestrap/sveltestrap';
+
   let { form } = $props();
+
+  $effect(() => {
+    if (form?.success) {
+      alert(form.message ?? 'Successfully registered!');
+      goto('/auth/login');
+    }
+  });
 </script>
 
-<h1>Register</h1>
 
-<form method="POST" action="?/register">
-  <label for="username">Username:</label>
-  <input
-    id="username"
-    name="username"
-    type="text"
-    value={form?.username ?? ''}
-    placeholder="Enter username"
-  />
+<div class="page d-flex align-items-center justify-content-center p-4">
+  <div class="wrap">
+    <div class="logo d-flex align-items-center justify-content-center gap-2 mb-4">
+      <i class="bi bi-music-note-beamed text-white fs-1"></i>
+      
+      <h1 class="text-white fw-bold m-0">SoundBox</h1>
+    </div>
 
-  <label for="email">Email Address:</label>
-  <input
-    id="email"
-    name="email"
-    type="email"
-    value={form?.email ?? ''}
-    placeholder="Enter Email Address"
-  />
+    <Card class="card">
+      <CardBody class="body">
+        <h2 class="fw-bold">Create an account</h2>
+        <Form method="POST" action="?/register">
 
-  <label for="password">Password:</label>
-  <input
-    id="password"
-    name="password"
-    type="password"
-    value={form?.password ?? ''}
-    placeholder="Enter password"
-  />
+          <FormGroup>
+            <Label for="username">Username</Label>
+            <InputGroup>
+              <InputGroupText><i class="bi bi-person"></i></InputGroupText>
+              <Input
+                id="username"
+                name="username"
+                type="text"
+                value={form?.username ?? ''}
+                placeholder="Enter username"
+              />
+            </InputGroup>
+          </FormGroup>
 
-  <label for="gender">Gender:</label>
-  <select id="gender" name="gender">
-    <option value="Male" selected={form?.gender === 'Male'}>Male</option>
-    <option value="Female" selected={form?.gender === 'Female'}>Female</option>
-    <option value="NonBinary" selected={form?.gender === 'NonBinary'}>Non-Binary</option>
-    <option value="GenderFluid" selected={form?.gender === 'GenderFluid'}>GenderFluid</option>
-    <option value="Other" selected={form?.gender === 'Other'}>Other</option>
-  </select>
+          <FormGroup>
+            <Label for="email">Email Address</Label>
+            <InputGroup>
+              <InputGroupText><i class="bi bi-envelope"></i></InputGroupText>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={form?.email ?? ''}
+                placeholder="Enter Email Address"
+              />
+            </InputGroup>
+          </FormGroup>
 
-  <label for="role">Role:</label>
-  <select id="role" name="role">
-    <option value="ADMIN" selected={form?.role === 'ADMIN'}>Admin</option>
-    <option value="USER" selected={form?.role === 'USER'}>User</option>
-  </select>
+          <FormGroup>
+            <Label for="password">Password</Label>
+            <InputGroup>
+              <InputGroupText><i class="bi bi-lock"></i></InputGroupText>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={form?.password ?? ''}
+                placeholder="Enter password"
+              />
+            </InputGroup>
+          </FormGroup>
 
-  <label for="bio">Bio:</label>
-  <input
-    id="bio"
-    name="bio"
-    type="bio"
-    value={form?.bio ?? ''}
-    placeholder="A short bio about who you are to put on your profile (can be added later)"
-  />
-  <button type="submit">Submit</button>
-</form>
+          <FormGroup>
+            <Label for="gender">Gender</Label>
+            <Input id="gender" name="gender" type="select">
+              <option value="Male" selected={form?.gender === 'Male'}>Male</option>
+              <option value="Female" selected={form?.gender === 'Female'}>Female</option>
+              <option value="NonBinary" selected={form?.gender === 'NonBinary'}>Non-Binary</option>
+              <option value="GenderFluid" selected={form?.gender === 'GenderFluid'}>GenderFluid</option>
+              <option value="Other" selected={form?.gender === 'Other'}>Other</option>
+            </Input>
+          </FormGroup>
 
-{#if form?.success}
-  <p>{form.message}</p>
-{/if}
+          <FormGroup>
+            <Label for="role">Role</Label>
+            <Input id="role" name="role" type="select">
+              <option value="ADMIN" selected={form?.role === 'ADMIN'}>Admin</option>
+              <option value="USER" selected={form?.role === 'USER'}>User</option>
+            </Input>
+          </FormGroup>
 
-{#if form?.success === false}
-  <p>{form.error}</p>
-{/if}
+          <FormGroup>
+            <Label for="bio">Bio</Label>
+            <Input
+              id="bio"
+              name="bio"
+              type="text"
+              value={form?.bio ?? ''}
+              placeholder="A short bio about who you are to put on your profile (can be added later)"
+            />
+          </FormGroup>
+
+          <Button type="submit" color="primary" class="button">
+            Submit
+          </Button>
+        </Form>
+
+      </CardBody>
+    </Card>
+
+
+    {#if form?.success}
+      <p>{form.message}</p>
+    {/if}
+
+    {#if form?.success === false}
+      <p>{form.error}</p>
+    {/if}
+  </div>
+</div>
+
+
+<style>
+  .page {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #a855f7, #db2777);
+  }
+</style>

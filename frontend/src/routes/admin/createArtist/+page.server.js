@@ -62,25 +62,42 @@ const birthYear = Number(formData.get("birthYear"));    const bio = formData.get
       });
     }
   },
-    delete: async ({ request, cookies }) => {
+  delete: async ({ request, cookies, fetch }) => {
     const token = cookies.get("token");
 
     const formData = await request.formData();
-    const name = formData.get("name");
-    const birthYear = formData.get("birthYear");
-    const bio = formData.get("bio");
-    const artist = { name, birthYear, bio };}
+    const id = formData.get("id");
 
-    //SMTH LIKE THIS
-//  try {
-//       const res = await fetch(`${API_BASE_URL}/api/artists`, {
-//         method: "DELETE",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//         body: JSON.stringify(artist), 
-//       });
+    if (!id) {
+      return fail(400, { error: "Missing artist id" });
+    }
 
-//       const data = await res.json();
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/artists/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      let data = null;
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      }
+
+      if (!res.ok) {
+        return fail(res.status, {
+          error: data?.message || "Failed to delete artist",
+        });
+      }
+
+      return { success: true, message: data?.message ?? "Artist deleted" };
+    } catch (err) {
+      return fail(500, {
+        success: false,
+        error: err.message,
+      });
+    }
+  },
 };

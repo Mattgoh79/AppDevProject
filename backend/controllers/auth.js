@@ -54,6 +54,7 @@ const login = async (req, res) => {
 
     const user = await prisma.user.findUnique({ where: { email } });
 
+    
     if (!user) {
       return res.status(401).json({ message: "Invalid email address" });
     }

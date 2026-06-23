@@ -18,7 +18,12 @@
     "test": "mocha",
     "test:coverage": "c8 mocha",
     "test:coverage:report": "c8 report --reporter=html",
-    "prisma:seed:artist": "node ./prisma/seeding/artist.js"
+    "prisma:seed:artist": "node ./prisma/seeding/artist.js",
+    "prisma:seed:albums": "node ./prisma/seeding/album.js",
+    "prisma:seed:song": "node ./prisma/seeding/song.js",
+    "prisma:seed:journal": "node ./prisma/seeding/journal.js",
+    "prisma:seed:user": "node ./prisma/seeding/user.js",
+    "prisma:seed:review": "node ./prisma/seeding/review.js"
   },
   "config": {
     "commitizen": {

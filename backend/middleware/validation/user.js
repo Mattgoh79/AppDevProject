@@ -23,19 +23,17 @@ const validatePostUser = (req, res, next) => {
       "string.max": "password should have a maximum length of {#limit}",
       "any.required": "password is required",
     }),
-    bio: Joi.string().min(3).max(100).required().messages({
+    bio: Joi.string().min(3).max(100).optional().allow('').messages({
       "string.base": "bio should be a string",
       "string.empty": "bio cannot be empty",
       "string.min": "bio should have a minimum length of {#limit}",
       "string.max": "bio should have a maximum length of {#limit}",
-      "any.required": "bio is required",
     }),
-    journalId: Joi.string().min(3).max(100).required().messages({
+    journalId: Joi.string().min(3).max(100).optional().allow('').messages({
       "string.base": "journalId should be a string",
       "string.empty": "journalId cannot be empty",
       "string.min": "journalId should have a minimum length of {#limit}",
       "string.max": "journalId should have a maximum length of {#limit}",
-      "any.required": "journalId is required",
     })
   });
 
@@ -43,8 +41,8 @@ const validatePostUser = (req, res, next) => {
   const { error } = songschema.validate(
     { username, email, password, bio, journalId},
     {
-      abortEarly: false, // Collect all errors, not just the first
-      convert: false, // Disable type coercion
+      abortEarly: false,
+      convert: false,
     },
   );
 
@@ -53,8 +51,10 @@ const validatePostUser = (req, res, next) => {
       message,
       type,
     }));
-    return res.status(409).json({ errors: formattedErrors });
-  }
+    return res.status(409).json({
+      message: formattedErrors[0]?.message,
+      errors: formattedErrors,
+    });  }
 
   next();
 };

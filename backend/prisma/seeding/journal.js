@@ -1,9 +1,9 @@
 import prisma from "../db.js";
-import { validatePostAlbum } from "../../middleware/validation/album.js";
+import { validatePostJournal } from "../../middleware/validation/journal.js";
 
 // Simulate an Express-like request/response to reuse existing validation middleware
-const validateAlbum = (album) => {
-  const req = { body: album };
+const validateJournal = (journal) => {
+  const req = { body: journal };
   let validationError = null;
 
   const res = {
@@ -14,7 +14,7 @@ const validateAlbum = (album) => {
     }),
   };
 
-  validatePostAlbum(req, res, () => {});
+  validatePostJournal(req, res, () => {});
 
   if (validationError) {
     const errorMessage =
@@ -25,70 +25,55 @@ const validateAlbum = (album) => {
   }
 };
 
-// artistId is filled in at runtime from existing Artists (see below).
-const baseAlbumData = [
+const journalData = [
   {
-    name: "Long title short songs",
-    genre: "Alt",
-    releaseDate: "2018-05-04",
-    albumType: "Album",
+    journalName: "Yup",
+    FavGenre: "Hyperpop",
+    FavArtist: "Brakence",
   },
   {
-    name: "Crazy Diamond",
-    genre: "Jazz",
-    releaseDate: "2020-09-12",
-    albumType: "EP",
+    journalName: "SirMay0",
+    FavGenre: "Indie",
+    FavArtist: "The Strokes",
   },
   {
-    name: "Subliminal Verses",
-    genre: "Metal",
-    releaseDate: "1980-11-23",
-    albumType: "Album",
+    journalName: "S1r",
+    FavGenre: "Pop",
+    FavArtist: "The King of Pop",
   },
   {
-    name: "Hypercondriac",
-    genre: "Hyperpop",
-    releaseDate: "2022-02-14",
-    albumType: "Single",
+    journalName: "hard songs, hard work",
+    FavGenre: "Jazz",
+    FavArtist: "Whoever made the pokemon opening",
   },
   {
-    name: "PAPA JOHNS PIZZARIA",
-    genre: "Folk",
-    releaseDate: "2019-07-19",
-    albumType: "Album",
+    journalName: "Eating Banan on Tree",
+    FavGenre: "Metal",
+    FavArtist: "FlyLeaf",
   },
 ];
 
-export const seedAlbums = async () => {
+export const seedJournals = async () => {
   const startTime = Date.now();
   const errors = [];
 
   try {
-
-    await prisma.album.deleteMany();
-
-    const artists = await prisma.artist.findMany({ select: { id: true } });
-
-    const albumData = baseAlbumData.map((album, index) => {
-      const artist = artists[index % artists.length];
-      return {
-        ...album,
-        artistId: artist ? artist.id : undefined,
-      };
-    });
+    // Run this AFTER seedUsers and seedReviews have cleared/finished,
+    // since User.journalId and Review.journalId reference Journal.
+    await prisma.journal.deleteMany();
 
     const validatedData = [];
-    for (const album of albumData) {
+    for (const journal of journalData) {
       try {
-        validateAlbum(album);
-        validatedData.push(album);
+        validateJournal(journal);
+        validatedData.push(journal);
       } catch (err) {
         errors.push(err.message);
       }
     }
 
     if (validatedData.length > 0) {
-      await prisma.album.createMany({
+      await prisma.journal.createMany({
         data: validatedData,
         skipDuplicates: true,
       });
@@ -101,10 +86,10 @@ export const seedAlbums = async () => {
 
   const time = ((Date.now() - startTime) / 1000).toFixed(1);
 
-  return { resource: "Albums", time, errors };
+  return { resource: "Journals", time, errors };
 };
 
-seedAlbums().then((report) => {
+seedJournals().then((report) => {
   console.log("==========================================");
   console.log("Seeding report");
   console.log("==========================================");

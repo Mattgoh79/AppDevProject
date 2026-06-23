@@ -17,11 +17,11 @@ const validatePostArtist = (req, res, next) => {
         "any.required": "birthYear is required",
     }),
     bio: Joi.string().min(3).max(100).required().messages({
-      "string.base": "releaseDate should be a string",
-      "string.empty": "releaseDate cannot be empty",
-      "string.min": "releaseDate should have a minimum length of {#limit}",
-      "string.max": "releaseDate should have a maximum length of {#limit}",
-      "any.required": "releaseDate is required",
+      "string.base": "bio should be a string",
+      "string.empty": "bio cannot be empty",
+      "string.min": "bio should have a minimum length of {#limit}",
+      "string.max": "bio should have a maximum length of {#limit}",
+      "any.required": "bio is required",
     })
   });
 

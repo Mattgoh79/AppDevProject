@@ -16,7 +16,7 @@ const validatePostSong = (req, res, next) => {
       "number.max": "trackNumber should be at most {#limit}",
       "any.required": "trackNumber is required",
     }),
-    length:  Joi.number().integer().min(1).max(100).required().messages({
+    length:  Joi.number().integer().min(1).max(100000).required().messages({
       "number.base": "length should be a number",
       "number.integer": "length should be an integer",
       "number.min": "length should be at least {#limit}",
@@ -87,7 +87,7 @@ const validatePutSong = (req, res, next) => {
       "number.min": "trackNumber should be at least {#limit}",
       "number.max": "trackNumber should be at most {#limit}",
     }),
-    length:  Joi.number().integer().min(1).max(100).optional().messages({
+    length:  Joi.number().integer().min(1).max(100000).optional().messages({
       "number.base": "trackNumber should be a number",
       "number.integer": "trackNumber should be an integer",
       "number.min": "trackNumber should be at least {#limit}",
