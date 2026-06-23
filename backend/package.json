@@ -23,7 +23,8 @@
     "prisma:seed:song": "node ./prisma/seeding/song.js",
     "prisma:seed:journal": "node ./prisma/seeding/journal.js",
     "prisma:seed:user": "node ./prisma/seeding/user.js",
-    "prisma:seed:review": "node ./prisma/seeding/review.js"
+    "prisma:seed:review": "node ./prisma/seeding/review.js",
+    "build:render": "npm install && npx prisma generate && npx prisma migrate deploy"
   },
   "config": {
     "commitizen": {
