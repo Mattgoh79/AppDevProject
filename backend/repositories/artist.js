@@ -60,8 +60,26 @@ async findAll(
   }
 
   async delete(id) {
-    return await prisma.artist.delete({ where: { id } });
+    return await prisma.$transaction(async (prismaTx) => {
+      // Find all of tje albums 
+      const albums = await prismaTx.album.findMany({ where: { artistId: id }, select: { id: true } });
+      const albumIds = albums.map(a => a.id);
+
+      // Delete reviews of the albums
+      if (albumIds.length > 0) {
+        await prismaTx.review.deleteMany({ where: { albumId: { in: albumIds } } });
+      }
+
+      // Delete songs 
+      await prismaTx.song.deleteMany({ where: { artistId: id } });
+
+      // Delete albums 
+      await prismaTx.album.deleteMany({ where: { artistId: id } });
+
+      // delete artist
+      return await prismaTx.artist.delete({ where: { id } });
+    });
   }
 }
 
-export default new ArtistRepository(); // Singleton instance
+export default new ArtistRepository(); //Singleton instance

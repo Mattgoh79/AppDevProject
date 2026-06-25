@@ -52,12 +52,17 @@
             </InputGroup>
           </FormGroup>
 
-          <Button type="submit" color="primary" class="button">
+          <Button type="submit" color="primary" class="button; text-center w-100 mt-3">
             Submit
           </Button>
         </Form>
-
-      </CardBody>
+        <p class="text-center text-secondary mt-4">Not with us?</p>
+        <div class="text-center">
+          <a data-sveltekit-reload href="/auth/register" class="register-link">
+            Register Here
+          </a>
+        </div>
+</CardBody>
     </Card>
 
 {#if form?.success}
@@ -74,5 +79,18 @@
   .page {
     min-height: 100vh;
     background: linear-gradient(to bottom right, #a855f7, #db2777);
+  }
+
+  .register-link {
+    color: #a855f7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+  }
+
+  .register-link:hover {
+    color: #db2777;
+    border-bottom-color: #db2777;
   }
 </style>

@@ -5,16 +5,16 @@ const API_BASE_URL = env.API_BASE_URL || "http://localhost:3000";
 
 export const load = async ({ fetch }) => {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/artists`);
-    const artists = await res.json();
+    const res = await fetch(`${API_BASE_URL}/api/albums`);
+    const albums = await res.json();
 
     return {
-      artists,
+      albums,
       error: null,
     };
   } catch (err) {
     return {
-      artists: [],
+      albums: [],
       error: err.message,
     };
   }
@@ -26,17 +26,19 @@ export const actions = {
 
     const formData = await request.formData();
     const name = formData.get("name");
-const birthYear = Number(formData.get("birthYear"));    const bio = formData.get("bio");
-    const artist = { name, birthYear, bio };
+    const genre = formData.get("genre");
+    const releaseDate = formData.get("releaseDate");
+    const albumType = formData.get("albumType"); //change it to drop down list 
+    const album = { name, genre, releaseDate, albumType };
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/artists`, {
+      const res = await fetch(`${API_BASE_URL}/api/albums`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(artist),
+        body: JSON.stringify(album),
       });
 
       const data = await res.json();
@@ -46,8 +48,10 @@ const birthYear = Number(formData.get("birthYear"));    const bio = formData.get
           error: data.message,
           errors: data.errors,
           name, 
-          birthYear,
-          bio, 
+          genre,
+          releaseDate,
+          albumType,
+           
         });
       }
 
@@ -57,8 +61,10 @@ const birthYear = Number(formData.get("birthYear"));    const bio = formData.get
         success: false,
         error: err.message,
           name, 
-          birthYear,
-          bio, 
+          genre,
+          releaseDate,
+          albumType,
+            
       });
     }
   },
@@ -69,11 +75,11 @@ const birthYear = Number(formData.get("birthYear"));    const bio = formData.get
     const id = formData.get("id");
 
     if (!id) {
-      return fail(400, { error: "Missing artist id" });
+      return fail(400, { error: "Missing album id" });
     }
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/artists/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/albums/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -88,11 +94,11 @@ const birthYear = Number(formData.get("birthYear"));    const bio = formData.get
 
       if (!res.ok) {
         return fail(res.status, {
-          error: data?.message || "Failed to delete artist",
+          error: data?.message || "Failed to delete album",
         });
       }
 
-      return { success: true, message: data?.message ?? "Artist deleted" };
+      return { success: true, message: data?.message ?? "Album deleted" };
     } catch (err) {
       return fail(500, {
         success: false,
@@ -105,38 +111,41 @@ const birthYear = Number(formData.get("birthYear"));    const bio = formData.get
     const formData = await request.formData();
     const id = formData.get("id");
     const name = formData.get("name");
-    const birthYear = Number(formData.get("birthYear"));
-    const bio = formData.get("bio");
+    const genre = formData.get("genre");
+    const releaseDate = formData.get("releaseDate");
+    const albumType = formData.get("albumType"); //change it to drop down list 
 
     if (!id) {
-      return fail(400, { error: "Missing artist id" });
+      return fail(400, { error: "Missing album id" });
     }
 
-    const artist = { name, birthYear, bio };
+    const album = { name, birthYear, bio };
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/artists/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/albums/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(artist),
+        body: JSON.stringify(album),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
         return fail(res.status, {
-          error: data?.message || "Failed to update artist",
+          error: data?.message || "Failed to update album",
           errors: data?.errors,
           name,
-          birthYear,
-          bio,
+          genre,
+          releaseDate,
+          albumType,
+
         });
       }
 
-      return { success: true, message: data.message ?? "Artist updated" };
+      return { success: true, message: data.message ?? "Album updated" };
     } catch (err) {
       return fail(500, {
         success: false,

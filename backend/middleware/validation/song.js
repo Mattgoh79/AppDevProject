@@ -30,7 +30,7 @@ const validatePostSong = (req, res, next) => {
       "string.max": "genre should have a maximum length of {#limit}",
       "any.required": "genre is required",
     }),
-    description: Joi.string().min(3).max(100).required().messages({
+    description: Joi.string().min(3).max(999).required().messages({
       "string.base": "description should be a string",
       "string.empty": "description cannot be empty",
       "string.min": "description should have a minimum length of {#limit}",
@@ -99,7 +99,7 @@ const validatePutSong = (req, res, next) => {
       "string.min": "userId should have a minimum length of {#limit}",
       "string.max": "userId should have a maximum length of {#limit}",
     }),
-    description: Joi.string().min(3).max(100).optional().messages({
+    description: Joi.string().min(3).max(999).optional().messages({
       "string.base": "userId should be a string",
       "string.empty": "userId cannot be empty",
       "string.min": "userId should have a minimum length of {#limit}",

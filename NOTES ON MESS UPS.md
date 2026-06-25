@@ -24,3 +24,9 @@ ok so ik we use string for releasedate rn cause its easier, but later on if want
 
 like maybe if in the future want to change ut icl for now its good enough lah
 
+
+
+# 3
+
+when we seed users, the password is always invalid, so smth is wrong with the user seed
+

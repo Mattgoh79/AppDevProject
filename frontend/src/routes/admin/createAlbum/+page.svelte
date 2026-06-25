@@ -14,8 +14,8 @@
   } from '@sveltestrap/sveltestrap';
 
   let { data, form } = $props();
-  let artists = data.artists.data;
-  let message = data.artists.message;
+  let albums = data.albums.data;
+  let message = data.albums.message;
   let errors = form?.errors;
   let error = data.error;
   let tokenError = form?.error;
@@ -26,26 +26,32 @@
 </script>
 
 <Container class="mt-4">
-  <h1 class="mb-4">Create Artist</h1>
+  <h1 class="mb-4">Create Album</h1>
 
   <Card class="mb-4">
-    <CardHeader>Create Artist</CardHeader>
+    <CardHeader>Create Album</CardHeader>
     <CardBody>
       <form method="POST" action="?/create">
+      <!-- add a dropdown, it shows all current artist in the data base, choose one, that will be the artistId added in this request -->
         <FormGroup>
           <label for="name">Name</label>
           <Input id="name" name="name" type="text" value={form?.name ?? ''} placeholder="Enter name" />
         </FormGroup>
-
         <FormGroup>
-          <label for="birthYear">Birth Year</label>
-          <Input id="birthYear" name="birthYear" type="number" value={form?.birthYear ?? ''} placeholder="Enter Year of Birth" />
+          <label for="genre">Genre</label>
+          <Input id="genre" name="genre" type="text" value={form?.genre ?? ''} placeholder="Enter the album genre" />
+        </FormGroup>
+        <FormGroup>
+          <label for="releaseDate">Release Date</label>
+          <Input id="releaseDate" name="releaseDate" type="text" value={form?.releaseDate ?? ''} placeholder="Enter Release Date" />
         </FormGroup>
 
+        <!-- change it to drop down -->
         <FormGroup>
-          <label for="bio">Bio</label>
-          <Input id="bio" name="bio" type="text" value={form?.bio ?? ''} placeholder="Enter a biography about the artist" />
+          <label for="albumType">Album Type</label>
+          <Input id="albumType" name="albumType" type="text" value={form?.albumType ?? ''} placeholder="Enter Album Type" />
         </FormGroup>
+
 
         <Button type="submit" color="primary">Submit</Button>
       </form>
@@ -78,8 +84,8 @@
     <Alert color="danger">{tokenError}</Alert>
   {/if}
 
-  {#if artists && artists.length > 0}
-    <h2 class="mb-3">Artists</h2>
+  {#if albums && albums.length > 0}
+    <h2 class="mb-3">Albums</h2>
     <Table striped bordered>
       <thead class="table-dark">
         <tr>
@@ -90,8 +96,8 @@
         </tr>
       </thead>
       <tbody>
-        {#each artists as artist}
-          {#if editingId === artist.id}
+        {#each albums as album}
+          {#if editingId === album.id}
             <tr>
               <td>
                 <Input type="text" bind:value={editName} />
@@ -104,7 +110,7 @@
               </td>
               <td>
                 <form method="POST" action="?/update" style="display: inline;">
-                  <input type="hidden" name="id" value={artist.id} />
+                  <input type="hidden" name="id" value={album.id} />
                   <input type="hidden" name="name" value={editName} />
                   <input type="hidden" name="birthYear" value={editBirthYear} />
                   <input type="hidden" name="bio" value={editBio} />
@@ -126,25 +132,25 @@
             </tr>
           {:else}
             <tr>
-              <td>{artist.name}</td>
-              <td>{artist.birthYear}</td>
-              <td>{artist.bio}</td>
+              <td>{album.name}</td>
+              <td>{album.birthYear}</td>
+              <td>{album.bio}</td>
               <td>
                 <Button
                   color="warning"
                   size="sm"
                   class="me-2"
                   on:click={() => {
-                    editingId = artist.id;
-                    editName = artist.name;
-                    editBirthYear = artist.birthYear;
-                    editBio = artist.bio;
+                    editingId = album.id;
+                    editName = album.name;
+                    editBirthYear = album.birthYear;
+                    editBio = album.bio;
                   }}
                 >
                   Edit
                 </Button>
                 <form method="POST" action="?/delete" style="display: inline;">
-                  <input type="hidden" name="id" value={artist.id} />
+                  <input type="hidden" name="id" value={album.id} />
                   <Button type="submit" color="danger" size="sm">Delete</Button>
                 </form>
               </td>

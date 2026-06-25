@@ -41,8 +41,8 @@ const validatePostAlbum = (req, res, next) => {
   const { error } = albumSchema.validate(
     {  name, genre, releaseDate, artistId },
     {
-      abortEarly: false, // Collect all errors, not just the first
-      convert: false, // Disable type coercion
+      abortEarly: false, 
+      convert: false,
     },
   );
 

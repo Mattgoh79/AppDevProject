@@ -9,7 +9,7 @@ const validatePostArtist = (req, res, next) => {
       "string.max": "name should have a maximum length of {#limit}",
       "any.required": "name is required",
     }),
-    birthYear:Joi.number().integer().min(1900).max(9999).required().messages({
+    birthYear:Joi.number().integer().min(1000).max(9999).required().messages({
         "number.base": "birthYear should be a number",
         "number.integer": "birthYear should be an integer",
         "number.min": "birthYear should be at least {#limit}",
@@ -53,7 +53,7 @@ const validatePutArtist = (req, res, next) => {
       "string.min": "name should have a minimum length of {#limit}",
       "string.max": "name should have a maximum length of {#limit}",
     }),
-    birthYear: Joi.number().integer().min(1).max(100).optional().messages({
+    birthYear: Joi.number().integer().min(1000).max(9999).optional().messages({
       "number.base": "genre should be a number",
       "number.integer": "numberField should be an integer",
       "number.min": "numberField should be at least {#limit}",
