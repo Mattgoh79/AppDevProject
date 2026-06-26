@@ -1,6 +1,7 @@
 import prisma from "../db.js";
+import bcrypt from "bcryptjs";
 import { validatePostUser } from "../../middleware/validation/user.js";
-
+ 
 // Simulate an Express-like request/response to reuse existing validation middleware
 const validateUser = (user) => {
   const req = { body: user };
@@ -78,16 +79,16 @@ const baseUserData = [
 export const seedUsers = async () => {
   const startTime = Date.now();
   const errors = [];
-
+ 
   try {
     // Run this AFTER seedReviews has cleared/finished, since
     // Review.userId references User.
     await prisma.user.deleteMany();
-
+ 
     // Pull existing Journals to attach via the unique journalId FK.
     // Run seedJournals BEFORE this seed, or every user will get journalId: null.
     const journals = await prisma.journal.findMany({ select: { id: true } });
-
+ 
     const userData = baseUserData.map((user, index) => {
       const journal = journals[index % journals.length];
       return {
@@ -95,17 +96,23 @@ export const seedUsers = async () => {
         journalId: journal ? journal.id : null,
       };
     });
-
+ 
     const validatedData = [];
     for (const user of userData) {
       try {
+        // Validate the plaintext password first -- this is what your real
+        // signup route receives and checks (length rules, etc.), so
+        // validation must run before hashing, not after.
         validateUser(user);
-        validatedData.push(user);
+        // Hash with bcrypt right before insert, matching what your signup
+        // route does, so the stored hash can actually be verified on login.
+        const hashedPassword = await bcrypt.hash(user.password, 10);
+        validatedData.push({ ...user, password: hashedPassword });
       } catch (err) {
         errors.push(err.message);
       }
     }
-
+ 
     if (validatedData.length > 0) {
       await prisma.user.createMany({
         data: validatedData,
@@ -117,12 +124,12 @@ export const seedUsers = async () => {
   } finally {
     await prisma.$disconnect();
   }
-
+ 
   const time = ((Date.now() - startTime) / 1000).toFixed(1);
-
+ 
   return { resource: "Users", time, errors };
 };
-
+ 
 seedUsers().then((report) => {
   console.log("==========================================");
   console.log("Seeding report");

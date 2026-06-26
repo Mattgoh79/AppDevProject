@@ -13,16 +13,34 @@
     Table,
   } from '@sveltestrap/sveltestrap';
 
+  // Album types must match the Record enum in schema.prisma exactly: EP, Single, Album
+  const ALBUM_TYPES = ["EP", "Single", "Album"];
+
   let { data, form } = $props();
-  let albums = data.albums.data;
-  let message = data.albums.message;
+  // getAlbums on the backend actually returns { message: albums } on
+  // success (an array under the `message` key, not `data`), and
+  // { message: "No albums found" } as a string on the empty/404 case.
+  // So `albums` is an array only when Array.isArray(...) is true;
+  // otherwise treat it as the empty-state text.
+  let rawAlbums = data.albums?.message;
+  let albums = Array.isArray(rawAlbums) ? rawAlbums : [];
+  let emptyMessage = Array.isArray(rawAlbums) ? null : rawAlbums;
+  // If your getArtists controller has the same { message: artists } shape
+  // as getAlbums, swap the line below for:
+  //   let artists = Array.isArray(data.artists?.data) ? data.artists.data
+  //               : Array.isArray(data.artists?.message) ? data.artists.message
+  //               : [];
+  let artists = data.artists?.data ?? [];
   let errors = form?.errors;
   let error = data.error;
   let tokenError = form?.error;
+
   let editingId = $state(null);
   let editName = $state("");
-  let editBirthYear = $state("");
-  let editBio = $state("");
+  let editGenre = $state("");
+  let editReleaseDate = $state("");
+  let editAlbumType = $state(ALBUM_TYPES[0]);
+  let editArtistId = $state("");
 </script>
 
 <Container class="mt-4">
@@ -32,7 +50,6 @@
     <CardHeader>Create Album</CardHeader>
     <CardBody>
       <form method="POST" action="?/create">
-      <!-- add a dropdown, it shows all current artist in the data base, choose one, that will be the artistId added in this request -->
         <FormGroup>
           <label for="name">Name</label>
           <Input id="name" name="name" type="text" value={form?.name ?? ''} placeholder="Enter name" />
@@ -46,12 +63,24 @@
           <Input id="releaseDate" name="releaseDate" type="text" value={form?.releaseDate ?? ''} placeholder="Enter Release Date" />
         </FormGroup>
 
-        <!-- change it to drop down -->
         <FormGroup>
           <label for="albumType">Album Type</label>
-          <Input id="albumType" name="albumType" type="text" value={form?.albumType ?? ''} placeholder="Enter Album Type" />
+          <Input id="albumType" name="albumType" type="select" value={form?.albumType ?? ALBUM_TYPES[0]}>
+            {#each ALBUM_TYPES as type}
+              <option value={type}>{type}</option>
+            {/each}
+          </Input>
         </FormGroup>
 
+        <FormGroup>
+          <label for="artistId">Artist</label>
+          <Input id="artistId" name="artistId" type="select" value={form?.artistId ?? ''}>
+            <option value="" disabled>Select an artist</option>
+            {#each artists as artist}
+              <option value={artist.id}>{artist.name}</option>
+            {/each}
+          </Input>
+        </FormGroup>
 
         <Button type="submit" color="primary">Submit</Button>
       </form>
@@ -90,8 +119,10 @@
       <thead class="table-dark">
         <tr>
           <th>Name</th>
-          <th>BirthYear</th>
-          <th>Bio</th>
+          <th>Genre</th>
+          <th>Release Date</th>
+          <th>Album Type</th>
+          <th>Artist</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -103,17 +134,33 @@
                 <Input type="text" bind:value={editName} />
               </td>
               <td>
-                <Input type="number" bind:value={editBirthYear} />
+                <Input type="text" bind:value={editGenre} />
               </td>
               <td>
-                <Input type="text" bind:value={editBio} />
+                <Input type="text" bind:value={editReleaseDate} />
+              </td>
+              <td>
+                <Input type="select" bind:value={editAlbumType}>
+                  {#each ALBUM_TYPES as type}
+                    <option value={type}>{type}</option>
+                  {/each}
+                </Input>
+              </td>
+              <td>
+                <Input type="select" bind:value={editArtistId}>
+                  {#each artists as artist}
+                    <option value={artist.id}>{artist.name}</option>
+                  {/each}
+                </Input>
               </td>
               <td>
                 <form method="POST" action="?/update" style="display: inline;">
                   <input type="hidden" name="id" value={album.id} />
                   <input type="hidden" name="name" value={editName} />
-                  <input type="hidden" name="birthYear" value={editBirthYear} />
-                  <input type="hidden" name="bio" value={editBio} />
+                  <input type="hidden" name="genre" value={editGenre} />
+                  <input type="hidden" name="releaseDate" value={editReleaseDate} />
+                  <input type="hidden" name="albumType" value={editAlbumType} />
+                  <input type="hidden" name="artistId" value={editArtistId} />
                   <Button type="submit" color="success" size="sm" class="me-2">Save</Button>
                 </form>
                 <Button
@@ -122,8 +169,10 @@
                   on:click={() => {
                     editingId = null;
                     editName = "";
-                    editBirthYear = "";
-                    editBio = "";
+                    editGenre = "";
+                    editReleaseDate = "";
+                    editAlbumType = ALBUM_TYPES[0];
+                    editArtistId = "";
                   }}
                 >
                   Cancel
@@ -133,8 +182,10 @@
           {:else}
             <tr>
               <td>{album.name}</td>
-              <td>{album.birthYear}</td>
-              <td>{album.bio}</td>
+              <td>{album.genre}</td>
+              <td>{album.releaseDate}</td>
+              <td>{album.albumType}</td>
+              <td>{album.artist?.name ?? album.artistId}</td>
               <td>
                 <Button
                   color="warning"
@@ -143,8 +194,10 @@
                   on:click={() => {
                     editingId = album.id;
                     editName = album.name;
-                    editBirthYear = album.birthYear;
-                    editBio = album.bio;
+                    editGenre = album.genre;
+                    editReleaseDate = album.releaseDate;
+                    editAlbumType = album.albumType;
+                    editArtistId = album.artistId;
                   }}
                 >
                   Edit
@@ -159,7 +212,7 @@
         {/each}
       </tbody>
     </Table>
-  {:else if message}
-    <p class="text-muted">{message}</p>
+  {:else if emptyMessage}
+    <p class="text-muted">{emptyMessage}</p>
   {/if}
 </Container>

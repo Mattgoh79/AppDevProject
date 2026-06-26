@@ -67,14 +67,15 @@ const baseSongData = [
 export const seedSongs = async () => {
   const startTime = Date.now();
   const errors = [];
-
+ 
   try {
-
+    // Run this BEFORE seedAlbums clears its table (Song.albumId references
+    // Album), and AFTER seedReviews if Review ever starts referencing Song.
     await prisma.song.deleteMany();
-
+ 
     // Run seedAlbums (and seedArtists, transitively) BEFORE this seed.
     const albums = await prisma.album.findMany({ select: { id: true, artistId: true } });
-
+ 
     const songData = baseSongData.map((song, index) => {
       const album = albums[index % albums.length];
       return {
@@ -83,7 +84,7 @@ export const seedSongs = async () => {
         artistId: album ? album.artistId : undefined,
       };
     });
-
+ 
     const validatedData = [];
     for (const song of songData) {
       try {
@@ -93,7 +94,7 @@ export const seedSongs = async () => {
         errors.push(err.message);
       }
     }
-
+ 
     if (validatedData.length > 0) {
       await prisma.song.createMany({
         data: validatedData,
@@ -105,12 +106,12 @@ export const seedSongs = async () => {
   } finally {
     await prisma.$disconnect();
   }
-
+ 
   const time = ((Date.now() - startTime) / 1000).toFixed(1);
-
+ 
   return { resource: "Songs", time, errors };
 };
-
+ 
 seedSongs().then((report) => {
   console.log("==========================================");
   console.log("Seeding report");

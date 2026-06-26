@@ -14,8 +14,8 @@
   } from '@sveltestrap/sveltestrap';
 
   let { data, form } = $props();
-  let artists = data.artists.data;
-  let message = data.artists.message;
+  let artists = Array.isArray(data.artists) ? data.artists : data.artists?.data ?? [];
+  let message = data.artists?.message;
   let errors = form?.errors;
   let error = data.error;
   let tokenError = form?.error;

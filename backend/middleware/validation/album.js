@@ -1,4 +1,5 @@
 import Joi from "joi";
+const ALBUM_TYPES = ["EP", "Single", "Album"];
 
 const validatePostAlbum = (req, res, next) => {
   const albumSchema = Joi.object({
@@ -28,6 +29,12 @@ const validatePostAlbum = (req, res, next) => {
     //   "string.empty": "albumType cannot be empty",
     //   "any.required": "albumType is required",
     // }),
+    albumType: Joi.string().valid(...ALBUM_TYPES).required().messages({
+      "string.base": "albumType should be an EP, Single or Album",
+      "string.empty": "albumType cannot be empty",
+      "any.only": `albumType must be one of: ${ALBUM_TYPES.join(", ")}`,
+      "any.required": "albumType is required",
+      }),
     artistId: Joi.string().min(3).max(100).required().messages({
       "string.base": "artistId should be a string",
       "string.empty": "artistId cannot be empty",
@@ -37,9 +44,9 @@ const validatePostAlbum = (req, res, next) => {
     }),
   });
 
-  const { name, genre, releaseDate, artistId} = req.body;
+  const { name, genre, releaseDate, albumType, artistId} = req.body;
   const { error } = albumSchema.validate(
-    {  name, genre, releaseDate, artistId },
+    {  name, genre, releaseDate, albumType, artistId },
     {
       abortEarly: false, 
       convert: false,
@@ -76,6 +83,11 @@ const validatePutAlbum = (req, res, next) => {
       "string.empty": "releaseDate cannot be empty",
       "string.min": "releaseDate should have a minimum length of {#limit}",
       "string.max": "releaseDate should have a maximum length of {#limit}",
+    }),
+    albumType: Joi.string().valid(...ALBUM_TYPES).optional().messages({
+      "string.base": "albumType should be an EP, Single or Album",
+      "string.empty": "albumType cannot be empty",
+      "any.only": `albumType must be one of: ${ALBUM_TYPES.join(", ")}`,
     }),
       artistId: Joi.string().min(3).max(100).optional().messages({
     "string.base": "artistId should be a string",
