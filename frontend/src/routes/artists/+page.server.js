@@ -2,27 +2,26 @@ import { env } from "$env/dynamic/private";
 
 const API_BASE_URL = env.API_BASE_URL || "http://localhost:3000";
 
-export const load = async ({ fetch, cookies }) => {
+export const load = async ({ fetch }) => {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/reviews`);
+    const res = await fetch(`${API_BASE_URL}/api/artists`);
     const result = await res.json();
 
-
-    const reviews = Array.isArray(result?.data)
+    // Same response-shape inconsistency seen on albums/reviews --
+    // handle both { data: [...] } and { message: [...] } defensively.
+    const artists = Array.isArray(result?.data)
       ? result.data
       : Array.isArray(result?.message)
         ? result.message
         : [];
 
     return {
-      reviews,
-      username: cookies.get("username") ?? null,
+      artists,
       error: null,
     };
   } catch (err) {
     return {
-      reviews: [],
-      username: null,
+      artists: [],
       error: err.message,
     };
   }

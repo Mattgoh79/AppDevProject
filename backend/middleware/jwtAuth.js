@@ -1,27 +1,41 @@
 import jwt from "jsonwebtoken";
 
-const jwtAuth = (req, res, next) => {
+import prisma from "../prisma/db.js";
+
+const jwtAuth = async (req, res, next) => {
   try {
-    // Authorization header should be: "Bearer <token>"
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "No token provided" });
+      return res.status(401).json({
+        message: "No token provided",
+      });
     }
 
     const token = authHeader.split(" ")[1];
 
-    // Verify token against the secret key
+    const blacklistedToken = await prisma.tokenBlacklist.findUnique({
+      where: {
+        token,
+      },
+    });
+
+    if (blacklistedToken) {
+      return res.status(401).json({
+        message: "Token has been invalidated",
+      });
+    }
+
     const payload = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Attach decoded payload to request for use in downstream handlers
     req.user = payload;
+    req.token = token;
 
     next();
   } catch (err) {
-    return res
-      .status(401)
-      .json({ message: "Not authorized to access this route" });
+    return res.status(401).json({
+      message: "Not authorised to access this route",
+    });
   }
 };
 

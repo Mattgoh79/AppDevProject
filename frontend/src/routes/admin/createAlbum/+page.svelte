@@ -13,23 +13,15 @@
     Table,
   } from '@sveltestrap/sveltestrap';
 
-  // Album types must match the Record enum in schema.prisma exactly: EP, Single, Album
+  import List from "$lib/components/list.svelte";
   const ALBUM_TYPES = ["EP", "Single", "Album"];
 
   let { data, form } = $props();
-  // getAlbums on the backend actually returns { message: albums } on
-  // success (an array under the `message` key, not `data`), and
-  // { message: "No albums found" } as a string on the empty/404 case.
-  // So `albums` is an array only when Array.isArray(...) is true;
-  // otherwise treat it as the empty-state text.
+
   let rawAlbums = data.albums?.message;
   let albums = Array.isArray(rawAlbums) ? rawAlbums : [];
   let emptyMessage = Array.isArray(rawAlbums) ? null : rawAlbums;
-  // If your getArtists controller has the same { message: artists } shape
-  // as getAlbums, swap the line below for:
-  //   let artists = Array.isArray(data.artists?.data) ? data.artists.data
-  //               : Array.isArray(data.artists?.message) ? data.artists.message
-  //               : [];
+
   let artists = data.artists?.data ?? [];
   let errors = form?.errors;
   let error = data.error;

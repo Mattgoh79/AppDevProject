@@ -12,18 +12,32 @@
     Row,
     Table,
   } from '@sveltestrap/sveltestrap';
+  import SuccessAlert from '$lib/components/alert.svelte';
 
   let { data, form } = $props();
-  let artists = Array.isArray(data.artists) ? data.artists : data.artists?.data ?? [];
-  let message = data.artists?.message;
-  let errors = form?.errors;
-  let error = data.error;
-  let tokenError = form?.error;
+  const artists = $derived(Array.isArray(data.artists) ? data.artists : data.artists?.data ?? []);
+  const message = $derived(data.artists?.message);
+  const errors = $derived(form?.errors);
+  const error = $derived(data.error);
+  const tokenError = $derived(form?.error);
   let editingId = $state(null);
   let editName = $state("");
   let editBirthYear = $state("");
   let editBio = $state("");
+
+  let showSuccessAlert = $state(false);
+
+  $effect(() => {
+    if (form?.success) {
+      showSuccessAlert = true;
+    }
+  });
 </script>
+
+<SuccessAlert
+  bind:visible={showSuccessAlert}
+  message={form?.message ?? "Successfully added"}
+/>
 
 <Container class="mt-4">
   <h1 class="mb-4">Create Artist</h1>
@@ -52,12 +66,26 @@
     </CardBody>
   </Card>
 
-  {#if form?.success}
-    <Alert color="success">{form.message}</Alert>
-  {/if}
-
   {#if form?.success === false}
     <Alert color="danger">{form.error}</Alert>
+  {/if}
+
+  {#if errors && errors.length > 0}
+    <Alert color="warning">
+      <ul class="mb-0">
+        {#each errors as error}
+          <li>{error.message}</li>
+        {/each}
+      </ul>
+    </Alert>
+  {/if}
+
+  {#if error}
+    <Alert color="danger">{error}</Alert>
+  {/if}
+
+  {#if tokenError}
+    <Alert color="danger">{tokenError}</Alert>
   {/if}
 
   {#if errors && errors.length > 0}

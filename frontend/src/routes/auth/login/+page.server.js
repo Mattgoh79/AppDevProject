@@ -49,6 +49,7 @@ export const actions = {
     });
 // just this alone works
     // redirect(303, "/admin/createArtist");
+    //ok its ok made the if statement work
     if(data.user.role === "ADMIN") {
       throw redirect(303, "/admin/createArtist");
     } else {

@@ -24,7 +24,8 @@
     "prisma:seed:journal": "node ./prisma/seeding/journal.js",
     "prisma:seed:user": "node ./prisma/seeding/user.js",
     "prisma:seed:review": "node ./prisma/seeding/review.js",
-    "build:render": "npm install && npx prisma generate && npx prisma migrate deploy"
+      "prisma:seed:all": "npm run prisma:seed:artist && npm run prisma:seed:albums && npm run prisma:seed:song && npm run prisma:seed:journal && npm run prisma:seed:user && npm run prisma:seed:review",
+    "build:render": "npm install && npx prisma generate && npx prisma migrate deploy && npm run prisma:seed:all"
   },
   "config": {
     "commitizen": {

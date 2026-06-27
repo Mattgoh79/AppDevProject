@@ -1,0 +1,77 @@
+<script>
+  import Header from "$lib/components/header.svelte";
+  import SignInButton from "$lib/components/signInButton.svelte";
+  import List from "$lib/components/list.svelte";
+
+  let { data } = $props();
+  const artists = data.artists;
+  const error = data.error;
+</script>
+
+<svelte:head>
+  <title>Artists · Liner Notes</title>
+</svelte:head>
+
+<Header>
+  <SignInButton />
+</Header>
+
+<main class="artists-page">
+  <section class="page-intro">
+    <p class="eyebrow">Catalogue</p>
+    <h1>Artists</h1>
+    <p class="intro-copy">Every artist logged, browse through to their albums and reviews.</p>
+  </section>
+
+  {#if error}
+    <p class="state-message error">Couldn't load artists: {error}</p>
+  {:else}
+    <List items={artists} basePath="/artists" emptyText="No artists yet." />
+  {/if}
+</main>
+
+<style>
+  .artists-page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .page-intro {
+    margin-bottom: 2.25rem;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin: 0 0 0.4rem 0;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .intro-copy {
+    color: var(--ink-soft);
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .state-message {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    padding: 2.5rem 0;
+  }
+
+  .state-message.error {
+    color: var(--accent);
+  }
+</style>

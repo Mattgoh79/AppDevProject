@@ -96,5 +96,26 @@ const login = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+const logout = async (req, res) => {
+  try {
+    await prisma.tokenBlacklist.upsert({
+      where: {
+        token: req.token,
+      },
+      update: {},
+      create: {
+        token: req.token,
+        expiresAt: new Date(req.user.exp * 1000),
+      },
+    });
 
-export { register, login };
+    return res.status(200).json({
+      message: "User successfully logged out",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+export { register, login, logout };

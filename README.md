@@ -24,3 +24,8 @@ When opening up again, run
 2. npx prisma migrate deploy
 3. npm run dev
 
+
+
+AI Declaration
+
+Claude - Front End CSS 

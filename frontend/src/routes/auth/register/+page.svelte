@@ -105,7 +105,12 @@
             Submit
           </Button>
         </Form>
-
+        <p class="text-center text-secondary mt-4">Not with us?</p>
+        <div class="text-center">
+          <a data-sveltekit-reload href="/auth/login" class="login-link">
+            Login Here
+          </a>
+        </div>
       </CardBody>
     </Card>
 
@@ -125,5 +130,17 @@
   .page {
     min-height: 100vh;
     background: linear-gradient(to bottom right, #a855f7, #db2777);
+  }
+    .login-link {
+    color: #a855f7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+  }
+
+  .login-link:hover {
+    color: #db2777;
+    border-bottom-color: #db2777;
   }
 </style>

@@ -52,7 +52,7 @@ async findAll(
 }
 
   async findById(id) {
-    return await prisma.artist.findUnique({ where: { id } });
+    return await prisma.artist.findUnique({ where: { id }, include: {albums: {include: {songs: true, reviews: true}}} });
   }
 
   async update(id, data) {
