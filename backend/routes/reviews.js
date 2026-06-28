@@ -12,7 +12,6 @@ import {
   updateReview,
   deleteReview,
 } from "../controllers/review.js";
-// import rateLimiter from "../middleware/rateLimiter.js";
 
 
 const router = express.Router();
@@ -22,33 +21,14 @@ import {
   validatePutReview,
 } from "../middleware/validation/review.js";
 import rateLimiter from "../middleware/rateLimiter.js";
-// router.post("/", validatePostReview, jwtAuth, rbac("ADMIN"), createReview,);
-// router.get("/", rateLimiter, getReviews);
-// router.get("/:id", rateLimiter, getReview);
-// router.put("/:id", validatePutReview, updateReview);
-
-//UNCOMMENT AFTER ADDING, ROLE BASED ACCESS, AUTH, VALIDATION,  AND RATE LIMIT
 
 router.post("/",validatePostReview, jwtAuth, createReview,);
-router.get("/",rateLimiter, getReviews);
+router.get("/",rateLimiter, rateLimiter, getReviews);
 router.get("/:id",rateLimiter, getReview);
 router.put("/:id",validatePutReview, updateReview);
 
 
 
-// router.put("/", (req, res) => {
-//   return res.status(400).json({
-//     message: "id is required in the URL parameter",
-//   });
-// });
-
 router.delete("/:id", deleteReview);
-// router.delete("/", (req, res) => {
-//   return res.status(400).json({
-//     message: "id is required in the URL parameter",
-//   });
-// });
-// You can also chain routes like this:
-// router.route("/").post(createReview).get(getReviews);
 
 export default router;

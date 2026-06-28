@@ -22,13 +22,6 @@ import {
   validatePutSong,
 } from "../middleware/validation/song.js";
 import rateLimiter from "../middleware/rateLimiter.js";
-// import jwtAuth from "../middleware/jwtAuth.js";
-// router.post("/", validatePostSong, jwtAuth, rbac("ADMIN"), createSong,);
-// router.get("/", rateLimiter, getSongs);
-// router.get("/:id", rateLimiter, getSong);
-// router.put("/:id", validatePutSong, updateSong);
-
-//UNCOMMENT AFTER ADDING, ROLE BASED ACCESS, AUTH, VALIDATION,  AND RATE LIMIT
 
 router.post("/", validatePostSong, jwtAuth, rbac("ADMIN"), createSong,);
 router.get("/", rateLimiter, getSongs);
@@ -36,20 +29,6 @@ router.get("/:id", rateLimiter, getSong);
 router.put("/:id", validatePutSong ,updateSong);
 
 
-
-// router.put("/", (req, res) => {
-//   return res.status(400).json({
-//     message: "id is required in the URL parameter",
-//   });
-// });
-
 router.delete("/:id", deleteSong);
-// router.delete("/", (req, res) => {
-//   return res.status(400).json({
-//     message: "id is required in the URL parameter",
-//   });
-// });
-// You can also chain routes like this:
-// router.route("/").post(createSong).get(getSongs);
 
 export default router;
