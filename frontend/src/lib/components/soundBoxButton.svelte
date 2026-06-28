@@ -42,7 +42,6 @@
     position: relative;
   }
 
-  /* Little tonearm flick on hover -- nods to a turntable needle dropping */
   .needle::after {
     content: "";
     position: absolute;

@@ -1,18 +1,5 @@
 <script>
-  /**
-   * Reusable confirmation modal. Use it anywhere you need the user
-   * to confirm a destructive or important action (e.g. logging out).
-   *
-   * Usage:
-   *   <Modal
-   *     bind:open={showLogoutModal}
-   *     title="Log out?"
-   *     message="You'll need to sign in again to get back to your dashboard."
-   *     confirmLabel="Log out"
-   *     danger
-   *     onConfirm={handleLogout}
-   *   />
-   */
+
   import { fade, scale } from "svelte/transition";
 
   let {

@@ -5,11 +5,9 @@
     Card,
     CardBody,
     CardHeader,
-    Col,
     Container,
     FormGroup,
     Input,
-    Row,
     Table,
   } from '@sveltestrap/sveltestrap';
   import SuccessAlert from '$lib/components/alert.svelte';

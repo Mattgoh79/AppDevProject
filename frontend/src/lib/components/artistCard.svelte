@@ -58,7 +58,6 @@
     position: relative;
   }
 
-  /* vinyl-label center hole motif, echoes ReviewCard's rating-stamp */
   .year-stamp::after {
     content: "";
     position: absolute;

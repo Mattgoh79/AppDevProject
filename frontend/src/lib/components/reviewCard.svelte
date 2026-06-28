@@ -70,7 +70,6 @@
     position: relative;
   }
 
-  /* vinyl-label center hole motif, echoes Header's logo mark */
   .rating-stamp::after {
     content: "";
     position: absolute;
