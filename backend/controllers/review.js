@@ -23,7 +23,7 @@ const createReview = async (req, res) => {
 
 const getReviews = async (req, res) => {
   try{
-    const reviews = await prisma.review.findMany();
+    const reviews = await prisma.review.findMany({include: {album: {include: {artist: true}}}});
     if(reviews.length === 0){
       return res.status(404).json({ message: "No reviews found"});
     }

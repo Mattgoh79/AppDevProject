@@ -23,12 +23,7 @@ const validatePostAlbum = (req, res, next) => {
       "string.min": "releaseDate should have a minimum length of {#limit}",
       "string.max": "releaseDate should have a maximum length of {#limit}",
       "any.required": "releaseDate is required",
-    }),// hopefully this .valid works for enum, there was nothing int eh lecture notes for enum so
-    // albumType: Joi.string().valid([albumType.EP, albumType.Single, albumType.Album]).required().messages({
-    //   "string.base": "albumType should be an EP, Single or Album",
-    //   "string.empty": "albumType cannot be empty",
-    //   "any.required": "albumType is required",
-    // }),
+    }),
     albumType: Joi.string().valid(...ALBUM_TYPES).required().messages({
       "string.base": "albumType should be an EP, Single or Album",
       "string.empty": "albumType cannot be empty",
@@ -116,6 +111,3 @@ const validatePutAlbum = (req, res, next) => {
 export { validatePostAlbum, validatePutAlbum };
 
 
-
-// export { validatePostAlbum};
-// export { validatePostAlbum, validatePutAlbum };

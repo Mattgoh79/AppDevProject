@@ -1,6 +1,6 @@
 /**
  * @file Manages all operations related to journals
- * @author John Doe
+ * @author ATT
  */
 import prisma from "../prisma/db.js";
 

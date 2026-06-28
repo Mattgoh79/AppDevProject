@@ -29,8 +29,8 @@ const validatePostArtist = (req, res, next) => {
   const { error } = artistschema.validate(
     {name, birthYear, bio},
     {
-      abortEarly: false, // Collect all errors, not just the first
-      convert: false, // Disable type coercion
+      abortEarly: false, 
+      convert: false, 
     },
   );
 

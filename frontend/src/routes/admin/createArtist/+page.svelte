@@ -13,6 +13,7 @@
     Table,
   } from '@sveltestrap/sveltestrap';
   import SuccessAlert from '$lib/components/alert.svelte';
+import AdminHeader from '$lib/components/adminHeader.svelte';
 
   let { data, form } = $props();
   const artists = $derived(Array.isArray(data.artists) ? data.artists : data.artists?.data ?? []);
@@ -33,6 +34,7 @@
     }
   });
 </script>
+<AdminHeader></AdminHeader>
 
 <SuccessAlert
   bind:visible={showSuccessAlert}

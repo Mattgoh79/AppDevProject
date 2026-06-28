@@ -29,8 +29,8 @@ const validatePostJournal = (req, res, next) => {
   const { error } = journalschema.validate(
     { journalName, FavGenre, FavArtist },
     {
-      abortEarly: false, // Collect all errors, not just the first
-      convert: false, // Disable type coercion
+      abortEarly: false,
+      convert: false, 
     },
   );
 

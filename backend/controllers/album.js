@@ -1,6 +1,6 @@
 /**
  * @file Manages all operations related to albums
- * @author John Doe
+ * @author ATT
  */
 import prisma from "../prisma/db.js";
 

@@ -12,7 +12,7 @@
     Row,
     Table,
   } from '@sveltestrap/sveltestrap';
-
+import AdminHeader from '$lib/components/adminHeader.svelte';
   import List from "$lib/components/list.svelte";
   const ALBUM_TYPES = ["EP", "Single", "Album"];
 
@@ -34,6 +34,7 @@
   let editAlbumType = $state(ALBUM_TYPES[0]);
   let editArtistId = $state("");
 </script>
+<AdminHeader></AdminHeader>
 
 <Container class="mt-4">
   <h1 class="mb-4">Create Album</h1>
